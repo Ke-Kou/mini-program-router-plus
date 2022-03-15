@@ -1,0 +1,35 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "outDir": "dist",
+    "sourceMap": true,
+    "module": "es6",
+    "target": "es6",
+    "allowSyntheticDefaultImports": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "esModuleInterop": true,
+    "noUnusedLocals": true,
+    "noImplicitAny": false,
+    "allowJs": false,
+    "experimentalDecorators": true,
+    "strictNullChecks": true,
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "moduleResolution": "node",
+    "declaration": true,
+    "typeRoots": [
+      "node_modules/@types",
+      "type.d.ts"
+    ],
+    "declarationDir": "dist/types"
+  },
+  "include": [
+    "lib/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/*.spec.ts"
+  ]
+}

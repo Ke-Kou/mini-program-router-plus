@@ -1,0 +1,32 @@
+{
+    "extends": [
+        "eslint:recommended",
+        "plugin:prettier/recommended"
+    ],
+    "rules": {
+        "import/no-commonjs": 0,
+        "no-unused-vars": "off"
+    },
+    "env": {
+        "browser": true,
+        "amd": true,
+        "node": true,
+        "es6": true
+    },
+    "overrides": [
+        {
+            "files": [
+                "src/*.ts"
+            ],
+            "parser": "@typescript-eslint/parser",
+            "parserOptions": {
+                "ecmaVersion": 2017,
+                "sourceType": "module",
+                "ecmaFeatures": {
+                    "legacyDecorators": true
+                },
+                "warnOnUnsupportedTypeScriptVersion": true
+            }
+        }
+    ]
+}
