@@ -4,7 +4,7 @@ import {logError} from "./logger";
 export function path2Route() {}
 
 export interface SysMiniRouter {
-    option: Record<string, any>;
+    options: Record<string, any>;
     route?: string;
     is?: string;
     path?: string;
@@ -46,6 +46,11 @@ export function getCurrentPageRoute() {
     return getRouterRoute(currentRouter);
 }
 
+/**
+ * 连接路径和参数
+ * @param route
+ * @param query
+ */
 export function combineRouteWithQuery(route: string, query: Object) {
     const queryStr = stringify(query, { arrayFormat: 'brackets'});
     return route.indexOf('?') >= 0 ? `${route}&${queryStr}` : `${route}?${queryStr}`;

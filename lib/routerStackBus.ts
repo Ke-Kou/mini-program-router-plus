@@ -1,5 +1,5 @@
 import {getRouterRoute, getSysPageRouters, SysMiniRouter} from "./utils/router";
-import MetaData, {PageType} from "./metaData";
+import MetaData, {PageType, RouterMetaType} from "./metaData";
 import {logInfo} from "./utils/logger";
 
 export type EventName = string;
@@ -25,6 +25,11 @@ export interface RouterStackItem {
 
 export interface TabRouterStackItem extends RouterStackItem{
     activated?: boolean;
+}
+
+export interface CreateNewStackFromSysResult {
+    stack: RouterStackItem,
+    meta: RouterMetaType,
 }
 
 /**
@@ -70,7 +75,7 @@ export default class RouterStackBus extends MetaData{
      */
     alignStack() {
         const sysRouterStack = getSysPageRouters();
-        const sys2Stack = this.createNewStackFromSysRouterStack(sysRouterStack[0])
+        const {stack: sys2Stack} = this.createNewStackFromSysRouterStack(sysRouterStack[0])
         const routeMeta = this.getRouterMetaBySysRoute(getRouterRoute(sysRouterStack[0]));
 
         if (sysRouterStack.length === 1) {
@@ -88,7 +93,7 @@ export default class RouterStackBus extends MetaData{
             if (diff > 0) {
                 this.popRouterStack(diff);
             } else if (diff < 0) {
-                throw new Error('系统路由栈数量大于mini-router栈')
+                throw new Error('系统路由栈数量大于mini-router栈, 请向开发者提出issue')
             }
         }
     }
@@ -103,11 +108,14 @@ export default class RouterStackBus extends MetaData{
         return leaveStack
     }
 
-    createNewStackFromSysRouterStack(router: SysMiniRouter): RouterStackItem {
+    createNewStackFromSysRouterStack(router: SysMiniRouter): CreateNewStackFromSysResult {
         const routerMeta = this.getRouterMetaBySysRoute(getRouterRoute(router))
         return {
-            route: routerMeta.route,
-            query: router.option,
+            stack: {
+                route: routerMeta.route,
+                query: router.options,
+            },
+            meta: routerMeta
         }
     }
 

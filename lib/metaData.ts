@@ -8,9 +8,10 @@ export enum PageType {
 
 export interface RouterMetaType {
     route: string;
-    eventEmit?: any;
-    beforeEnter?: BeforeEachHandle;
     pageType: PageType;
+    aliasName?: string;
+    // eventEmit?: any;
+    beforeEnter?: BeforeEachHandle;
 }
 
 export interface RouterStackMetaType {
@@ -29,6 +30,7 @@ export default class MetaData {
             route: item.route,
             beforeEnter: item.beforeEnter,
             pageType: item.isTab ? PageType.tab : PageType.normal,
+            aliasName: item.name,
         }))
     }
 
@@ -36,7 +38,15 @@ export default class MetaData {
         if (this.routerMeta) {
             return this.routerMeta.filter(item => item.route === route)[0];
         } else {
-            throw new Error('未配置routes')
+            throw new Error('未配置routes, 请在初始化的时候配置')
+        }
+    }
+
+    getRouterMetaByAliasName(name: string) {
+        if (this.routerMeta) {
+            return this.routerMeta.filter(item => item.aliasName === name)[0];
+        } else {
+            throw new Error('未配置routes, 请在初始化的时候配置')
         }
     }
 

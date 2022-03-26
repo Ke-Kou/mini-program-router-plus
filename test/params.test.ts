@@ -31,7 +31,6 @@ describe('路由传参测试', function () {
     })
 
     afterEach(() => {
-        router = null;
         spy && spy.mockClear();
         global.getCurrentPages = null;
     })

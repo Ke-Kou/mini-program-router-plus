@@ -5,6 +5,6 @@ export function logInfo(mes: string) {
 
 export function logError(mes: string, show: boolean = true) {
     if (show) {
-        throw new Error(mes)
+       console.error(mes)
     }
 }

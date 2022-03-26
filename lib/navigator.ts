@@ -83,8 +83,8 @@ export default class Navigator extends RouterStackBus {
     }
 
     protected _switchTab(config: NavigatorParams): Promise<any> {
-        this.clearRouterStack();
         this.alignStack();
+        this.clearRouterStack();
         this.addTabRouterStacks({
             route: config.url,
             events: config.events,

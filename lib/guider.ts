@@ -42,7 +42,7 @@ export default class Guider extends Navigator {
 
         const currentRouter = this.getRouterMetaBySysRoute(currentPageRoute);
         const nextRouter = this.getRouterMetaByRoute(nextPageRoute);
-        logError(`没有找到对应的路由配置信息,请检查是否配置${nextPageRoute}`, !nextRouter);
+        logError(`没有找到对应的路由配置信息,请检查是否配置路由: ${nextPageRoute}`, !nextRouter);
         const selfBeforeEnter = nextRouter.beforeEnter;
 
         const nextMaker = (resolve, reject) => (sign?: boolean | string,

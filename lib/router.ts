@@ -1,7 +1,8 @@
 import {NavigatorParams} from "./navigator";
 import Guider, {BeforeEachHandle, AfterEachHandle} from "./guider";
-import {getCurrentPageRoute} from "./utils/router";
+import {getCurrentPageRoute, getSysPageRouters} from "./utils/router";
 import {logError} from "./utils/logger";
+import {PageType} from "./metaData";
 
 export interface RoutesConfig {
     route: string; // 路径,必须是/pages/index/index形式
@@ -29,6 +30,34 @@ export default class Router extends Guider{
         this.setConfig(config);
     }
 
+    private getRoutePath(name: string) {
+        if (name.match(/^\//)) {
+            return name;
+        } else {
+            const meta = this.getRouterMetaByAliasName(name);
+            if (meta) {
+                return meta.route;
+            } else {
+                throw new Error('请检查routes配置别名');
+            }
+        }
+    }
+
+    /**
+     * 该方法只能在首次初始化的时候被调用
+     * 用于第一次同步系统路由栈到自定义路由栈中
+     * @private
+     */
+    initStack() {
+        const sysFirstRouterStack = getSysPageRouters()[0];
+        const {stack, meta} = this.createNewStackFromSysRouterStack(sysFirstRouterStack);
+        if (meta.pageType === PageType.normal) {
+            this.addRouterStack(stack)
+        } else {
+            this.addTabRouterStacks({...stack, activated: true})
+        }
+    }
+
     setConfig(config: RouterConfig) {
         config.navigator && this.setNavigatorController(config.navigator)
         config.routes && this.initMetaData(config.routes);
@@ -37,7 +66,7 @@ export default class Router extends Guider{
     }
 
     goto(route: string,  option?: Partial<NavigatorParams>) {
-        // todo 检查route是否是绝对路径
+        route = this.getRoutePath(route);
         const currentPageRoute = getCurrentPageRoute();
         return this.checkGuardsBefore(route).then(
             () => {
@@ -53,6 +82,7 @@ export default class Router extends Guider{
     }
 
     switchTab(route: string,  option?: Partial<NavigatorParams>) {
+        route = this.getRoutePath(route);
         const currentPageRoute = getCurrentPageRoute();
         return this.checkGuardsBefore(route).then(
             () => {
@@ -68,6 +98,7 @@ export default class Router extends Guider{
     }
 
     reLaunch(route: string,  option?: Partial<NavigatorParams>) {
+        route = this.getRoutePath(route);
         const currentPageRoute = getCurrentPageRoute();
         return this.checkGuardsBefore(route).then(
             () => {
@@ -83,6 +114,7 @@ export default class Router extends Guider{
     }
 
     redirectTo(route: string,  option?: Partial<NavigatorParams>) {
+        route = this.getRoutePath(route);
         const currentPageRoute = getCurrentPageRoute();
         return this.checkGuardsBefore(route).then(
             () => {
@@ -98,6 +130,7 @@ export default class Router extends Guider{
     }
 
     navigateTo(route: string,  option?: Partial<NavigatorParams>) {
+        route = this.getRoutePath(route);
         const currentPageRoute = getCurrentPageRoute();
         return this.checkGuardsBefore(route).then(
             () => {
@@ -113,6 +146,7 @@ export default class Router extends Guider{
     }
 
     navigateBack(route: string,  option?: Partial<NavigatorParams>): Promise<any> {
+        route = this.getRoutePath(route);
         const currentPageRoute = getCurrentPageRoute();
         return this.checkGuardsBefore(route).then(
             () => {

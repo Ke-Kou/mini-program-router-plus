@@ -31,7 +31,6 @@ describe('A/B事件处理', function () {
     })
 
     afterEach(() => {
-        router = null;
         spy && spy.mockClear();
         global.getCurrentPages = null;
     })
