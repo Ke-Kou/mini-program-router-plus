@@ -94,6 +94,25 @@ interface option {
     events?: Function; // 监听事件
 }
 ```
+#### 别名跳转
+通过在routes配置文件增加name字段,可以通过别名方式跳转
+```ts
+wx.$router = initRouter({
+    navigator: wx, // navigator是用于提供原生跳转方法 
+    routes: [ // 具体页面信息
+        {
+            route: '/pages/user/user',
+            name: 'user'
+        },
+        {
+            route: '/pages/logs/logs',
+            name: 'logs'
+        }
+    ],
+});
+
+wx.$router.goto('user') // 等于wx.$router.goto('/pages/user/user',)
+```
 
 ### 路由守卫
 <span style="color: #fff">注意:</span>路由守卫无法拦截到第一进入的情况,因此建议有一个类似开屏页面的落地页
