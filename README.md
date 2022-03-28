@@ -1,7 +1,7 @@
 
 # mini-program router
 
-A powerful router for mini-program
+一款功能强大的小程序路由控制器
 - promise的调用方式
 - 使用goto方法来代替原来的navigateTo和switchTab方法
 - 完善的A/B通讯功能
@@ -163,7 +163,7 @@ wx.$router.goto('', {
     } 
 })
 // 执行监听事件
-Taro.$$router.emit(eventName, 'B event').then(
+wx.$router.emit(eventName, 'B event').then(
     res => {
         // 下面是A->B
         // 执行监听后的事件
@@ -188,7 +188,7 @@ wx.$router.goto('/pages/logs/logs', {
     }
 })
 // 接收参数
-const {query, params} = wx.router.getCurrentInstanceParams();
+const {query, params} = wx.$router.getCurrentInstanceParams();
 ```
 
 ## 感谢
