@@ -39,11 +39,11 @@ export default class RouterStackBus extends MetaData{
     private stacks: RouterStackItem[] = [];
     private tabStacks: TabRouterStackItem[] = []; // tabStack一定是栈底
 
-    addRouterStack(item: RouterStackItem) {
+    protected addRouterStack(item: RouterStackItem) {
         this.stacks.push(item);
     }
 
-    addTabRouterStacks(item: TabRouterStackItem) {
+    protected addTabRouterStacks(item: TabRouterStackItem) {
         let tabStack;
         this.tabStacks.forEach(stack => {
             stack.activated = false;
@@ -62,18 +62,18 @@ export default class RouterStackBus extends MetaData{
         }
     }
 
-    clearRouterStack() {
+    protected clearRouterStack() {
         this.stacks = [];
     }
 
-    clearTabRouterStack() {
+    protected clearTabRouterStack() {
         this.tabStacks = [];
     }
 
     /**
      * 抹平系统stack和自定义stack之间的区别
      */
-    alignStack() {
+    protected alignStack() {
         const sysRouterStack = getSysPageRouters();
         const {stack: sys2Stack} = this.createNewStackFromSysRouterStack(sysRouterStack[0])
         const routeMeta = this.getRouterMetaBySysRoute(getRouterRoute(sysRouterStack[0]));
@@ -98,7 +98,7 @@ export default class RouterStackBus extends MetaData{
         }
     }
 
-    popRouterStack(num: number = 1) {
+    protected popRouterStack(num: number = 1) {
         const leaveStack: RouterStackItem[] = [];
         while (num) {
             const stack = this.stacks.pop();
@@ -108,7 +108,7 @@ export default class RouterStackBus extends MetaData{
         return leaveStack
     }
 
-    createNewStackFromSysRouterStack(router: SysMiniRouter): CreateNewStackFromSysResult {
+    protected createNewStackFromSysRouterStack(router: SysMiniRouter): CreateNewStackFromSysResult {
         const routerMeta = this.getRouterMetaBySysRoute(getRouterRoute(router))
         return {
             stack: {
@@ -119,14 +119,14 @@ export default class RouterStackBus extends MetaData{
         }
     }
 
-    getCurrentStack() {
+    protected getCurrentStack() {
         this.alignStack();
         return this.stacks.length ?
             this.stacks[this.stacks.length - 1] :
             this.tabStacks.filter(stack => stack.activated)[0]
     }
 
-    runEvent(name: EventName, params: any) {
+    protected runEvent(name: EventName, params: any) {
         this.alignStack();
         return new Promise((resolve, reject) => {
             const next: NextBCallback = (res) => resolve(res);
