@@ -1,6 +1,6 @@
 import {NavigatorParams} from "./navigator";
 import Guider, {BeforeEachHandle, AfterEachHandle} from "./guider";
-import {getCurrentPageRoute, getSysPageRouters} from "./utils/router";
+import {completionPathWithAbsolute, getCurrentPageRoute, getSysPageRoute, getSysPageRouters} from "./utils/router";
 import {logError} from "./utils/logger";
 import {PageType} from "./metaData";
 
@@ -145,13 +145,13 @@ export default class Router extends Guider{
             .catch((err) => {logError(err)})
     }
 
-    navigateBack(route: string,  option?: Partial<NavigatorParams>): Promise<any> {
-        route = this.getRoutePath(route);
+    navigateBack(option?: Partial<NavigatorParams>): Promise<any> {
+        const lastSysRoute = completionPathWithAbsolute(getSysPageRoute(-2));
         const currentPageRoute = getCurrentPageRoute();
-        return this.checkGuardsBefore(route).then(
+        return this.checkGuardsBefore(lastSysRoute).then(
             () => {
                 const {url, ...rest} = option || {};
-                return this._navigateBack({url: url || route, ...rest});
+                return this._navigateBack({url: url || lastSysRoute, ...rest});
             },
             res => {
                 return res

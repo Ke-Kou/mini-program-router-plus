@@ -1,5 +1,6 @@
 import {RoutesConfig} from "./router";
 import {BeforeEachHandle} from "./guider";
+import {completionPathWithAbsolute} from "./utils/router";
 
 export enum PageType {
     normal,
@@ -22,10 +23,10 @@ export interface RouterStackMetaType {
  * 元数据层
  */
 export default class MetaData {
-    routerMeta: RouterMetaType[];
-    routerStackMeta: RouterStackMetaType;
+    protected routerMeta: RouterMetaType[];
+    protected routerStackMeta: RouterStackMetaType;
 
-    initMetaData(config: RoutesConfig[]) {
+    protected initMetaData(config: RoutesConfig[]) {
         this.routerMeta = config.map(item => ({
             route: item.route,
             beforeEnter: item.beforeEnter,
@@ -34,7 +35,7 @@ export default class MetaData {
         }))
     }
 
-    getRouterMetaByRoute(route: RouterMetaType['route']) {
+    protected getRouterMetaByRoute(route: RouterMetaType['route']) {
         if (this.routerMeta) {
             return this.routerMeta.filter(item => item.route === route)[0];
         } else {
@@ -42,7 +43,7 @@ export default class MetaData {
         }
     }
 
-    getRouterMetaByAliasName(name: string) {
+    protected getRouterMetaByAliasName(name: string) {
         if (this.routerMeta) {
             return this.routerMeta.filter(item => item.aliasName === name)[0];
         } else {
@@ -50,8 +51,8 @@ export default class MetaData {
         }
     }
 
-    getRouterMetaBySysRoute(route: string) {
-        route = route.match(/^\//) ? route : '/' + route;
+    protected getRouterMetaBySysRoute(route: string) {
+        route = completionPathWithAbsolute(route);
         return this.getRouterMetaByRoute(route);
     }
 

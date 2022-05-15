@@ -83,76 +83,93 @@ export default class Navigator extends RouterStackBus {
     }
 
     protected _switchTab(config: NavigatorParams): Promise<any> {
-        this.alignStack();
-        this.clearRouterStack();
-        this.addTabRouterStacks({
-            route: config.url,
-            events: config.events,
-            params: config.params,
-            query: config.query,
-        });
         const newConfig = {
             ...config,
             url: combineRouteWithQuery(config.url, config.query || {}),
         }
-        return navigatorCall2Promise(this.controller.switchTab)(newConfig);
+        return navigatorCall2Promise(this.controller.switchTab)(newConfig).then(res => {
+            this.alignStack();
+            this.clearRouterStack();
+            this.addTabRouterStacks({
+                route: config.url,
+                events: config.events,
+                params: config.params,
+                query: config.query,
+            });
+            return res;
+        }, reason => reason).catch(err => {
+            throw err;
+        });
     }
 
     protected _reLaunch(config: NavigatorParams): Promise<any> {
-        const routerMeta = this.getRouterMetaByRoute(config.url);
         const temp = {
             route: config.url,
             events: config.events,
             params: config.params,
             query: config.query,
         }
-        this.clearRouterStack();
-        this.clearTabRouterStack();
-        if (routerMeta.pageType === PageType.tab) {
-            this.addTabRouterStacks(temp)
-        } else {
-            this.addRouterStack(temp);
-        }
         const newConfig = {
             ...config,
             url: combineRouteWithQuery(config.url, config.query || {}),
         }
-        return navigatorCall2Promise(this.controller.reLaunch)(newConfig);
+        return navigatorCall2Promise(this.controller.reLaunch)(newConfig).then(() => {
+            const routerMeta = this.getRouterMetaByRoute(config.url);
+            this.clearRouterStack();
+            this.clearTabRouterStack();
+            if (routerMeta.pageType === PageType.tab) {
+                this.addTabRouterStacks(temp)
+            } else {
+                this.addRouterStack(temp);
+            }
+        });
     }
 
     protected _redirectTo(config: NavigatorParams): Promise<any> {
-        this.alignStack();
-        this.addRouterStack({
-            route: config.url,
-            events: config.events,
-            params: config.params,
-            query: config.query,
-        });
         const newConfig = {
             ...config,
             url: combineRouteWithQuery(config.url, config.query || {}),
         }
-        return navigatorCall2Promise(this.controller.redirectTo)(newConfig);
+        return navigatorCall2Promise(this.controller.redirectTo)(newConfig).then((res) => {
+            this.alignStack();
+            this.addRouterStack({
+                route: config.url,
+                events: config.events,
+                params: config.params,
+                query: config.query,
+            });
+            return res;
+        }, reason => reason).catch(err => {
+            throw err;
+        });
     }
 
     protected _navigateTo(config: NavigatorParams): Promise<any> {
-        this.alignStack();
-        this.addRouterStack({
-            route: config.url,
-            events: config.events,
-            params: config.params,
-            query: config.query,
-        });
         const newConfig = {
             ...config,
             url: combineRouteWithQuery(config.url, config.query || {}),
         }
-        return navigatorCall2Promise(this.controller.navigateTo)(newConfig);
+        return navigatorCall2Promise(this.controller.navigateTo)(newConfig).then((res) => {
+            this.alignStack();
+            this.addRouterStack({
+                route: config.url,
+                events: config.events,
+                params: config.params,
+                query: config.query,
+            });
+            return res;
+        }, reason => reason).catch(err => {
+            throw err;
+        });
     }
 
     protected _navigateBack(config: NavigatorParams): Promise<any> {
-        this.alignStack();
-        this.popRouterStack(config.delta || 1);
-        return navigatorCall2Promise(this.controller.navigateBack)(config);
+        return navigatorCall2Promise(this.controller.navigateBack)(config).then((res) => {
+            this.alignStack();
+            this.popRouterStack(config.delta || 1);
+            return res;
+        }, reason => reason).catch(err => {
+            throw err;
+        });
     }
 }

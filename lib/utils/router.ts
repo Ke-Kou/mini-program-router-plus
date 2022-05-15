@@ -24,7 +24,7 @@ export function getSysPageRouters(): SysMiniRouter[] {
 }
 
 /**
- * 获取当前路由地址
+ * 获取路由地址 /page/path
  * @param router
  */
 export function getRouterRoute(router: SysMiniRouter) {
@@ -38,12 +38,32 @@ export function getRouterRoute(router: SysMiniRouter) {
 }
 
 /**
+ * 根据路由栈index获取路由地址
+ * @param index 大于等于0时从栈底数返回, 小于0时从栈顶数返回
+ */
+export function getSysPageRoute(index = -1) {
+    const routers = getSysPageRouters();
+    let step = index >= 0 ? index : routers.length + index;
+    const router = routers[step >= 0 && step < routers.length ? step : 0];
+    return getRouterRoute(router);
+}
+
+/**
  * 获取当前的路由
  */
 export function getCurrentPageRoute() {
-    const routers = getSysPageRouters();
-    const currentRouter = routers[routers.length  - 1];
-    return getRouterRoute(currentRouter);
+    return getSysPageRoute();
+    // const routers = getSysPageRouters();
+    // const currentRouter = routers[routers.length  - 1];
+    // return getRouterRoute(currentRouter);
+}
+
+/**
+ * 将路径补全为绝对路径
+ * @param route
+ */
+export function completionPathWithAbsolute(route: string) {
+    return route.match(/^\//) ? route : '/' + route;
 }
 
 /**

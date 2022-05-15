@@ -1,16 +1,17 @@
 
 # mini-program router
+English | [简体中文](https://github.com/Ke-Kou/mini-program-router-plus/blob/main/README.CN.md)
 
-一款功能强大的小程序路由控制器
-- promise的调用方式
-- 使用goto方法来代替原来的navigateTo和switchTab方法
-- 完善的A/B通讯功能
-- 统一的路由守卫机制
-- 路由栈超过限制时的智能控制
-- 支持路由传递复杂参数
-- 多平台支持
+A powerful miniProgram-routing controller
+- Use promise callback
+- Use the goto method to replace the original navigateTo and switchTab methods
+- A Perfect A/B communication function
+- A routing guard
+- A routing stack controller
+- Support query and params
+- Support Multi-platform
 
-## 安装
+## Install
 ### NPM
 ```
 $ npm i mini-program-router-plus
@@ -20,22 +21,24 @@ $ npm i mini-program-router-plus
 $ yarn add mini-program-router-plus
 ```
 
-## 使用
+## Use
 
-### 引入
-CommonJS
+### import&require
 ```js
+// common
 const {initRouter} = require("mini-program-router-plus");
+// for Taro
+import {initRouter} from "mini-program-router-plus";
 ```
 
-### 初始化配置
+### initialize
 ```js
 const {initRouter} = require("mini-program-router-plus");
 
-// 你可以将返回对象挂载在任意的全局对象上
+// You can mount the returned object on any global object
 wx.$router = initRouter({
-    navigator: wx, // navigator是用于提供原生跳转方法 
-    routes: [ // 具体页面信息
+    navigator: wx, // An object that provides native jump methods
+    routes: [ // route config 
         {
             route: '/pages/index/index',
             isTab: true,
@@ -45,17 +48,19 @@ wx.$router = initRouter({
             beforeEnter: (to, from, next) => {next()}
         }
     ],
-    maxStack: 10, // 最大的路由栈,默认是10
-    beforeEach: (to, from, next) => {next()}, // 前置路由守卫
-    afterEach: (to, from) => {} // 后置路由
+    maxStack: 10, // The maximum number of routing stacks, default 10
+    beforeEach: (to, from, next) => {
+        next() // you need call this function to next page;
+    }, // Pre-Route Guard
+    afterEach: (to, from) => {} // After-Route
 });
 ```
 
-### 跳转
+### Api
 #### goto
-- goto方法会判断对应的页面是否是tab页或者是normal页来执行对应的跳转方法
-- 当整个路由栈超过最大路由栈时,如果对应的页面存在时,会返回到对应页面
-- 接受promise的形式回调
+- The goto method will determine whether the corresponding page is a tab page or a normal page to execute the corresponding jump method
+- When the entire routing stack exceeds the maximum routing stack, if the corresponding page exists, it will return to the corresponding page
+- Callbacks that accept promises
 ```js
 wx.$router.goto('/pages/index/index', option).then((res) => {
     console.log('success')
@@ -75,31 +80,31 @@ wx.$router.redirectTo('/pages/index/index', option);
 ```
 #### navigateTo
 ```js
-wx.$router.goto('/pages/index/index', option);
+wx.$router.navigateTo('/pages/index/index', option);
 ```
 #### navigateBack
 ```js
-wx.$router.goto('/pages/index/index', option);
+wx.$router.navigateBack(option);
 ```
-#### option参数
+#### option
 ```ts
 interface option {
-    url?: string; // 路径,会重置之前填写的路径 
-    delta?: number; // navigateBack参数 
-    success?: Function; // 成功事件回调
-    fail?: Function; // 失败事件回调
-    complete?: Function; // 结束回调
-    query?: Record<string, string|number>; // 携带在链接上的参数
-    params?: Record<string, any>; // 存放在内存中的参数
-    events?: Function; // 监听事件
+    url?: string; // path, which will replace the path of the previous parameter
+    delta?: number; // the param of navigateBack 
+    success?: Function; // success callback
+    fail?: Function; // fail callback 
+    complete?: Function; // finish callback
+    query?: Record<string, string|number>; // it will combined with path
+    params?: Record<string, any>; // it only save in memory
+    events?: Function; // some listener
 }
 ```
-#### 别名跳转
-通过在routes配置文件增加name字段,可以通过别名方式跳转
+#### Alias Jump
+by adding the __name__ to the routes-config, you can jump through aliases
 ```ts
 wx.$router = initRouter({
-    navigator: wx, // navigator是用于提供原生跳转方法 
-    routes: [ // 具体页面信息
+    navigator: wx,
+    routes: [
         {
             route: '/pages/user/user',
             name: 'user'
@@ -111,33 +116,33 @@ wx.$router = initRouter({
     ],
 });
 
-wx.$router.goto('user') // 等于wx.$router.goto('/pages/user/user',)
+wx.$router.goto('user') // equal wx.$router.goto('/pages/user/user',)
 ```
 
-### 路由守卫
-<span style="color: #fff">注意:</span>路由守卫无法拦截到第一进入的情况,因此建议有一个类似开屏页面的落地页
-#### 全局路由守卫
-在初始化配置传入beforeEach钩子函数,钩子函数接受三个删除
-- to: 待跳转的页面
-- from: 当前执行跳转的页面
-- next: 执行下一个操作
+### Route Guard
+<span style="color: #fff">Notice:</span>The routing guard cannot intercept the first entry, so it is recommended to have a landing page similar to the opening page
+#### global routing guard
+Pass in the beforeEach hook function in the initialization configuration, the hook function accepts three parameters
+- to: page to jump to
+- from: The page to which the jump is currently performed
+- next: run jump
 ```js
 initRouter({
     beforeEach: (to, from, next) => {
         next();
-    }, // 前置路由钩子
-    afterEach: (to, from) => {} // 后置路由钩子
+    },
+    afterEach: (to, from) => {}
 });
 ```
 
-##### next可以接受布尔值参数或者是字符串
+##### next can accept a boolean parameter or a string
 ```js
-next(); // 表示执行跳转
-next(false); // false表示拦截跳转, true表示执行跳转
-next('/pages/home/home') // 表示跳转到/pages/home/home页面
+next(); // successful jump
+next(false); // false is not jump, true is go next;
+next('/pages/home/home') // jump to anthor page; 
 ```
-#### 局部路由守卫
-在routes数组参数中配置beforeEnter属性,参数属性和全局路由守卫一致
+#### local route guard
+Configure the beforeEnter property in the routes array parameter, the parameter property is consistent with the global route guard
 ```js
 {
     routes: [
@@ -149,34 +154,30 @@ next('/pages/home/home') // 表示跳转到/pages/home/home页面
 }
 ```
 
-### A/B通讯
-目前A/B通讯, B页面只接受上一个路由栈传入事件
+### A / B
 ```js
-// 添加监听事件
-wx.$router.goto('', {
+// Add listener event
+wx.$router.goto('B', {
     events: {
         [eventName]: (data, next) => {
-            // 下面是B -> A
-            console.log(data); // B event
-            next('A event'); // 执行promise.then中的事件
+            console.log(data); // B event data
+            next('A event'); // Execute the event in the $emit method then of page B
         }
     } 
 })
-// 执行监听事件
+// Execute the listener event
 wx.$router.emit(eventName, 'B event').then(
     res => {
-        // 下面是A->B
-        // 执行监听后的事件
-        console.log(res) // A event
+        // a next called from A page
+        console.log(res)
     }
 )
 ```
 
-### 传递/接收参数
-- 原来的小程序参数传递会序列化导致一些参数格式错误
-- 现在可以通过params参数传递复杂参数
+### Pass/Receive Parameters
+- The original router transfer will serialize and cause some parameter format errors
+- Complex parameters can now be passed through the params parameter
 ```js
-// 传递参数
 wx.$router.goto('/pages/logs/logs', {
     query: {
         name: 'k.k',
@@ -187,9 +188,13 @@ wx.$router.goto('/pages/logs/logs', {
         city: ['china', 'US']
     }
 })
-// 接收参数
+// query {name, age}
+// params {say, city}
+const {getCurrentInstanceParams} = require('mini-program-router-plus');
+const {query, params} = getCurrentInstanceParams();
+// or
 const {query, params} = wx.$router.getCurrentInstanceParams();
 ```
 
-## 感谢
-[JerryC 微信小程序路由实战](https://segmentfault.com/a/1190000039682661)
+## Thanks
+[JerryC](https://segmentfault.com/a/1190000039682661)
