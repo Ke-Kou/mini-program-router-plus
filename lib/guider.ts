@@ -39,8 +39,8 @@ export default class Guider extends Navigator {
      */
     protected checkGuardsBefore(nextPageRoute: string): Promise<string> {
         const currentPageRoute = getCurrentPageRoute();
-
         const currentRouter = this.getRouterMetaBySysRoute(currentPageRoute);
+        logError(`没有找到对应的路由配置信息,请检查是否配置路由: ${currentPageRoute}`, !currentRouter);
         const nextRouter = this.getRouterMetaByRoute(nextPageRoute);
         logError(`没有找到对应的路由配置信息,请检查是否配置路由: ${nextPageRoute}`, !nextRouter);
         const selfBeforeEnter = nextRouter.beforeEnter;

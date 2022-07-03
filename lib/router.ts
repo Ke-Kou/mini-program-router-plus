@@ -50,11 +50,17 @@ export default class Router extends Guider{
      */
     initStack() {
         const sysFirstRouterStack = getSysPageRouters()[0];
-        const {stack, meta} = this.createNewStackFromSysRouterStack(sysFirstRouterStack);
-        if (meta.pageType === PageType.normal) {
-            this.addRouterStack(stack)
+        if (sysFirstRouterStack) {
+            const {stack, meta} = this.createNewStackFromSysRouterStack(sysFirstRouterStack);
+            if (meta.pageType === PageType.normal) {
+                this.addRouterStack(stack)
+            } else {
+                this.addTabRouterStacks({...stack, activated: true})
+            }
         } else {
-            this.addTabRouterStacks({...stack, activated: true})
+            setTimeout(() => {
+                this.initStack()
+            }, 200);
         }
     }
 

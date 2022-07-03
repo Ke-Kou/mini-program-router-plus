@@ -66,7 +66,7 @@ describe('路径跳转测试', function () {
     it('navigateBack测试', function () {
         spy = jest.spyOn(navigator, 'navigateBack');
         spy.mockImplementation((options) => {options.success()})
-        return router.navigateBack('/pages/home/home').then(() => {
+        return router.navigateBack().then(() => {
             expect(spy).toHaveBeenCalled();
         })
     });
@@ -153,7 +153,7 @@ describe('别名跳转测试', function () {
     it('navigateBack测试', function () {
         spy = jest.spyOn(navigator, 'navigateBack');
         spy.mockImplementation((options) => {options.success()})
-        return router.navigateBack('home').then(() => {
+        return router.navigateBack().then(() => {
             expect(spy).toHaveBeenCalled();
         })
     });

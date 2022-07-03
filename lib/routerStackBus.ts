@@ -36,9 +36,14 @@ export interface CreateNewStackFromSysResult {
  * 路由栈数据层
  */
 export default class RouterStackBus extends MetaData{
-    private stacks: RouterStackItem[] = [];
-    private tabStacks: TabRouterStackItem[] = []; // tabStack一定是栈底
+    private stacks: RouterStackItem[] = []; // 普通栈
+    private tabStacks: TabRouterStackItem[] = []; // tab栈 tab栈一定是栈底
 
+    /**
+     * 添加普通栈
+     * @param item
+     * @protected
+     */
     protected addRouterStack(item: RouterStackItem) {
         this.stacks.push(item);
     }
