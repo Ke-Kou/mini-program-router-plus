@@ -15,17 +15,18 @@ export interface RouterMetaType {
     beforeEnter?: BeforeEachHandle;
 }
 
-export interface RouterStackMetaType {
-
-}
 
 /**
  * 元数据层
  */
 export default class MetaData {
     protected routerMeta: RouterMetaType[];
-    protected routerStackMeta: RouterStackMetaType;
 
+    /**
+     * 首次初始化meta队列
+     * @param config
+     * @protected
+     */
     protected initMetaData(config: RoutesConfig[]) {
         this.routerMeta = config.map(item => ({
             route: item.route,
@@ -35,6 +36,11 @@ export default class MetaData {
         }))
     }
 
+    /**
+     * 获取meta信息 by route地址
+     * @param route
+     * @protected
+     */
     protected getRouterMetaByRoute(route: RouterMetaType['route']) {
         if (this.routerMeta) {
             return this.routerMeta.filter(item => item.route === route)[0];
@@ -43,6 +49,11 @@ export default class MetaData {
         }
     }
 
+    /**
+     * 获取meta信息 by aliasName属性
+     * @param name
+     * @protected
+     */
     protected getRouterMetaByAliasName(name: string) {
         if (this.routerMeta) {
             return this.routerMeta.filter(item => item.aliasName === name)[0];
@@ -51,6 +62,11 @@ export default class MetaData {
         }
     }
 
+    /**
+     * 获取meta信息 by 系统路由地址
+     * @param route
+     * @protected
+     */
     protected getRouterMetaBySysRoute(route: string) {
         route = completionPathWithAbsolute(route);
         return this.getRouterMetaByRoute(route);

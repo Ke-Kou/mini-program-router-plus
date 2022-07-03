@@ -1,8 +1,6 @@
 import {stringify} from "./tools";
 import {logError} from "./logger";
 
-export function path2Route() {}
-
 export interface SysMiniRouter {
     options: Record<string, any>;
     route?: string;
@@ -74,4 +72,13 @@ export function completionPathWithAbsolute(route: string) {
 export function combineRouteWithQuery(route: string, query: Object) {
     const queryStr = stringify(query, { arrayFormat: 'brackets'});
     return route.indexOf('?') >= 0 ? `${route}&${queryStr}` : `${route}?${queryStr}`;
+}
+
+/**
+ * 判断两个路径是否相等
+ * @param path1
+ * @param path2
+ */
+export function pathEquals(path1: string, path2: string) {
+    return completionPathWithAbsolute(path1) === completionPathWithAbsolute(path2);
 }

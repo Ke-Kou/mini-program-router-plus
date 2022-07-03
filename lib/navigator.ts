@@ -2,7 +2,7 @@ import {navigatorCall2Promise} from "./utils/tools";
 import {PageType} from "./metaData";
 import {RoutesConfig} from "./router";
 import {logInfo} from "./utils/logger";
-import {combineRouteWithQuery, getRouterRoute, getSysPageRouters} from "./utils/router";
+import {combineRouteWithQuery, getRouterRoute, getSysPageRouters, pathEquals} from "./utils/router";
 import RouterStackBus, {Emit} from "./routerStackBus";
 
 export interface NavigatorParams  {
@@ -65,9 +65,9 @@ export default class Navigator extends RouterStackBus {
         if (stackLen >= this.maxStack) {
             for (let i = stackLen - 1; i >= 0; i--) {
                 const route = getRouterRoute(currentRouterStack[i]);
-                if (route === config.url) {
+                if (pathEquals(route, config.url)) {
                     return this._navigateBack({
-                        delta: stackLen - i,
+                        delta: stackLen - 1 - i,
                         ...config
                     })
                 }
@@ -166,7 +166,6 @@ export default class Navigator extends RouterStackBus {
     protected _navigateBack(config: NavigatorParams): Promise<any> {
         return navigatorCall2Promise(this.controller.navigateBack)(config).then((res) => {
             this.alignStack();
-            this.popRouterStack(config.delta || 1);
             return res;
         }, reason => reason).catch(err => {
             throw err;
