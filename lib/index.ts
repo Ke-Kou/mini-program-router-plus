@@ -1,16 +1,17 @@
 import Router, {RouterConfig} from "./router";
 
-let instanceRouter;
+let instanceRouter: Router;
 
-export const getCurrentInstanceParams = () => instanceRouter.getCurrentInstanceParams();
+export function getCurrentInstanceParams<T>() {
+    if (instanceRouter) {
+        return instanceRouter.getCurrentInstanceParams<T>();
+    } else {
+        throw new Error('you need initRouter before use getCurrentInstanceParams');
+    }
+}
+
 export const initRouter = (config: RouterConfig) => {
     instanceRouter = new Router(config);
     instanceRouter.initStack();
-
-    // Do not use the following api for now
-    instanceRouter.push = instanceRouter.navigateTo;
-    instanceRouter.pop = instanceRouter.navigateBack;
-    instanceRouter.to = instanceRouter.goto;
-    instanceRouter.replace = instanceRouter.redirectTo;
     return instanceRouter
 }

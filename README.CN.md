@@ -51,6 +51,18 @@ wx.$router = initRouter({
     afterEach: (to, from) => {} // 后置路由
 });
 ```
+### 在typescript使用
+你需要在文件根目录下添加global.d.ts,下面是个demo
+```ts
+// in Taro
+declare module '@tarojs/taro' {
+  import Router from "mini-program-router-plus/dist/router";
+
+  let $$router: Router;
+}
+
+Taro.$$router.goto('/path');
+```
 
 ### 跳转
 #### goto

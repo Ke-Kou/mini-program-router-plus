@@ -1,8 +1,9 @@
 import {NavigatorParams} from "./navigator";
 import Guider, {BeforeEachHandle, AfterEachHandle} from "./guider";
 import {completionPathWithAbsolute, getCurrentPageRoute, getSysPageRoute, getSysPageRouters} from "./utils/router";
-import {logError} from "./utils/logger";
+import {logDetail, logError, logGroupEnd, logGroupStart, openDebuggeMode} from "./utils/logger";
 import {PageType} from "./metaData";
+import {RouterStackItem} from "./routerStackBus";
 
 export interface RoutesConfig {
     route: string; // 路径,必须是/pages/index/index形式
@@ -17,6 +18,7 @@ export interface RouterConfig {
     maxStack?: number; // 最大路由栈
     beforeEach?: BeforeEachHandle // 路由前置钩子
     afterEach?: AfterEachHandle // 路由后置钩子
+    debugger?: boolean; // 开启debugger模式
 }
 
 
@@ -59,7 +61,9 @@ export default class Router extends Guider{
             }
         } else {
             setTimeout(() => {
-                this.initStack()
+                if (!(this.getStack() || this.getTabStack())) {
+                    this.initStack()
+                }
             }, 200);
         }
     }
@@ -68,7 +72,7 @@ export default class Router extends Guider{
         config.navigator && this.setNavigatorController(config.navigator)
         config.routes && this.initMetaData(config.routes);
         config.maxStack && this.setMaxStack(config.maxStack);
-
+        config.debugger && openDebuggeMode();
     }
 
     goto(route: string,  option?: Partial<NavigatorParams>) {
@@ -179,11 +183,17 @@ export default class Router extends Guider{
         return this.runEvent(eventName, params)
     }
 
-    getCurrentInstanceParams() {
-        const {query, params} = this.getCurrentStack();
+    getCurrentInstanceParams<T>() {
+        logGroupStart('获取当前路由参数')
+        const stack = this.getCurrentStack() as RouterStackItem<T>;
+        logDetail('获取当前路由', [
+            '当前路由',
+            stack
+        ])
+        logGroupEnd();
         return {
-            query,
-            params
+            query: stack.query,
+            params: stack.params
         }
     }
 

@@ -25,9 +25,9 @@ $ yarn add mini-program-router-plus
 
 ### import&require
 ```js
-// common
+// commonjs
 const {initRouter} = require("mini-program-router-plus");
-// for Taro
+// ESM
 import {initRouter} from "mini-program-router-plus";
 ```
 
@@ -54,6 +54,19 @@ wx.$router = initRouter({
     }, // Pre-Route Guard
     afterEach: (to, from) => {} // After-Route
 });
+```
+
+### use in typescript
+you need add global.d.ts in file root, there are an example:
+```ts
+// in Taro
+declare module '@tarojs/taro' {
+  import Router from "mini-program-router-plus/dist/router";
+
+  let $$router: Router;
+}
+// you can use
+Taro.$$router.goto('/path');
 ```
 
 ### Api
