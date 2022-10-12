@@ -1,6 +1,12 @@
 import {NavigatorParams} from "./navigator";
 import Guider, {BeforeEachHandle, AfterEachHandle} from "./guider";
-import {completionPathWithAbsolute, getCurrentPageRoute, getSysPageRoute, getSysPageRouters} from "./utils/router";
+import {
+    completionPathWithAbsolute,
+    getCurrentPageRoute,
+    getCurrentPagesOptions,
+    getSysPageRoute,
+    getSysPageRouters
+} from "./utils/router";
 import {logDetail, logError, logGroupEnd, logGroupStart, openDebuggeMode} from "./utils/logger";
 import {PageType} from "./metaData";
 import {RouterStackItem} from "./routerStackBus";
@@ -186,13 +192,14 @@ export default class Router extends Guider{
     getCurrentInstanceParams<T>() {
         logGroupStart('获取当前路由参数')
         const stack = this.getCurrentStack() as RouterStackItem<T>;
+        const nativeUrlParams = getCurrentPagesOptions();
         logDetail('获取当前路由', [
             '当前路由',
             stack
         ])
         logGroupEnd();
         return {
-            query: stack.query,
+            query: {...stack.query, ...(nativeUrlParams || {})},
             params: stack.params
         }
     }

@@ -57,6 +57,14 @@ export function getCurrentPageRoute() {
 }
 
 /**
+ * 获取当前系统路由option
+ */
+export function getCurrentPagesOptions() {
+   const routes = getSysPageRouters();
+   return routes[routes.length - 1].options;
+}
+
+/**
  * 将路径补全为绝对路径
  * @param route
  */

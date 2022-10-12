@@ -1,6 +1,6 @@
 {
     "name": "mini-program-router-plus",
-    "version": "0.3.0",
+    "version": "0.3.1",
     "main": "dist",
     "miniprogram": "dist",
     "files": [
