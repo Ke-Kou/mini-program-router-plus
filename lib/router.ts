@@ -192,14 +192,14 @@ export default class Router extends Guider{
     getCurrentInstanceParams<T>() {
         logGroupStart('获取当前路由参数')
         const stack = this.getCurrentStack() as RouterStackItem<T>;
-        const nativeUrlParams = getCurrentPagesOptions();
+        const nativeUrlQuery = getCurrentPagesOptions();
         logDetail('获取当前路由', [
             '当前路由',
             stack
         ])
         logGroupEnd();
         return {
-            query: {...stack.query, ...(nativeUrlParams || {})},
+            query: {...stack.query, ...(nativeUrlQuery)},
             params: stack.params
         }
     }

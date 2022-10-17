@@ -1,4 +1,4 @@
-import {stringify} from "./tools";
+import {parse, stringify} from "./tools";
 import {logError} from "./logger";
 
 export interface SysMiniRouter {
@@ -61,7 +61,21 @@ export function getCurrentPageRoute() {
  */
 export function getCurrentPagesOptions() {
    const routes = getSysPageRouters();
-   return routes[routes.length - 1].options;
+   const options = routes[routes.length - 1].options;
+   let keys: string[] = [];
+   if (options && (keys = Object.keys(options)).length) {
+       let stringifyQuery = '';
+       keys.forEach(((item, index) => {
+           stringifyQuery += item;
+           stringifyQuery += '=';
+           stringifyQuery += options[item];
+           if (index !== keys.length - 1) {
+               stringifyQuery += '&';
+           }
+       }))
+       return parse(stringifyQuery);
+   }
+   return {};
 }
 
 /**
