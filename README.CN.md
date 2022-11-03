@@ -70,7 +70,12 @@ Taro.$$router.goto('/path');
 - 当整个路由栈超过最大路由栈时,如果对应的页面存在时,会返回到对应页面
 - 接受promise的形式回调
 ```js
+// switchTab & navigateTo
 wx.$router.goto('/pages/index/index', option).then((res) => {
+    console.log('success')
+});
+// switchTab & redirectTo
+wx.$router.goto('/pages/index/index', option, true).then((res) => {
     console.log('success')
 });
 ```

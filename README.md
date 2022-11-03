@@ -75,7 +75,12 @@ Taro.$$router.goto('/path');
 - When the entire routing stack exceeds the maximum routing stack, if the corresponding page exists, it will return to the corresponding page
 - Callbacks that accept promises
 ```js
+// switchTab & navigateTo
 wx.$router.goto('/pages/index/index', option).then((res) => {
+    console.log('success')
+});
+// switchTab & redirectTo
+wx.$router.goto('/pages/index/index', option, true).then((res) => {
     console.log('success')
 });
 ```

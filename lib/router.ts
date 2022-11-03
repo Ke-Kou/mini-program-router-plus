@@ -81,13 +81,13 @@ export default class Router extends Guider{
         config.debugger && openDebuggeMode();
     }
 
-    goto(route: string,  option?: Partial<NavigatorParams>) {
+    goto(route: string,  option?: Partial<NavigatorParams>, replaceMode: boolean = false) {
         route = this.getRoutePath(route);
         const currentPageRoute = getCurrentPageRoute();
         return this.checkGuardsBefore(route).then(
             () => {
                 const {url, ...rest} = option || {};
-                return this._goto({url: url || route, ...rest});
+                return this._goto({url: url || route, ...rest}, replaceMode);
             },
             res => {
                 return res

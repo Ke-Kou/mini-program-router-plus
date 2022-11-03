@@ -1,6 +1,14 @@
 # Changelog
 [English](https://github.com/Ke-Kou/mini-program-router-plus/blob/main/CHANGELOG.md) | 简体中文
 
+### 0.4.0
+New Functionality:
+- 给goto方法增加replace模式
+
+### 0.3.0
+New Functionality:
+- 修改获取参数方式
+
 ### 0.2.0 (2022.05.15)
 New Functionality:
 - 增加英文文档 

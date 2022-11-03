@@ -1,6 +1,14 @@
 # Changelog
 English | [简体中文](https://github.com/Ke-Kou/mini-program-router-plus/blob/main/CHANGELOG.CN.md)
 
+### 0.4.0
+New Functionality:
+- Add replace mode for goto
+
+### 0.3.0
+New Functionality:
+- Change the way of get params
+
 ### 0.2.0 (2022.05.15)
 New Functionality:
 - Add English documents

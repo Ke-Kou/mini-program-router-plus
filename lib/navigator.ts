@@ -58,7 +58,7 @@ export default class Navigator extends RouterStackBus {
         this.maxStack = num;
     }
 
-    protected _goto(config: NavigatorParams): Promise<any> {
+    protected _goto(config: NavigatorParams, replaceMode: boolean): Promise<any> {
         const router = this.getRouterMetaByRoute(config.url);
         const currentRouterStack = getSysPageRouters();
         const stackLen = currentRouterStack.length;
@@ -77,7 +77,11 @@ export default class Navigator extends RouterStackBus {
            if (router.pageType === PageType.tab) {
                return this._switchTab(config)
            } else {
-               return this._navigateTo(config)
+               if (replaceMode) {
+                   return this._redirectTo(config)
+               } else {
+                   return this._navigateTo(config)
+               }
            }
         }
     }
