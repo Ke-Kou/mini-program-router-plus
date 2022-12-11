@@ -177,7 +177,7 @@ export default class Router extends Guider{
             .catch((err) => {logError(err)})
     }
 
-    beforEach(handle: BeforeEachHandle) {
+    beforeEach(handle: BeforeEachHandle) {
         this.setBeforeEach(handle)
     }
 

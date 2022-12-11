@@ -40,7 +40,7 @@ describe('路由守卫测试', function () {
         spy = jest.spyOn(navigator, 'navigateTo');
         spy.mockImplementation((options) => {options.success()});
 
-        router.beforEach((to, from, next) => {
+        router.beforeEach((to, from, next) => {
             _to = to;
             _from = from;
             next();
@@ -56,7 +56,7 @@ describe('路由守卫测试', function () {
         spy = jest.spyOn(navigator, 'navigateTo');
         spy.mockImplementation((options) => {options.success()});
 
-        router.beforEach((to, from, next) => {
+        router.beforeEach((to, from, next) => {
             _to = to;
             _from = from;
             next(false);
@@ -73,7 +73,7 @@ describe('路由守卫测试', function () {
         spy.mockImplementation((options) => {options.success()});
         const spy2 = jest.spyOn(navigator, 'navigateTo');
         spy2.mockImplementation((options) => {options.success()})
-        router.beforEach((to, from, next) => {
+        router.beforeEach((to, from, next) => {
             _to = to;
             _from = from;
             next('/pages/home/home');
